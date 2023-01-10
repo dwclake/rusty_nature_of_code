@@ -1,3 +1,5 @@
+use rusty_nature_of_code::prelude::*;
+
 use raylib::prelude::*;
 
 fn main() {
@@ -7,22 +9,29 @@ fn main() {
     // Creation of a tuple with two named values, width and height, which is the screen size converted to floats
     let ( width, height ) = ( SCREEN_SIZE.0 as f32, SCREEN_SIZE.1 as f32 );
 
-    // Creation of the RayLib handle and thread
+    // Creation of the RayLib handle and thread, sets the screen size, and gives the window a title
     let ( mut rl, thread ) = init( )
-            .size(SCREEN_SIZE.0, SCREEN_SIZE.1)
-            .title("rusty_nature_of_code")
+            .size(SCREEN_SIZE.0, SCREEN_SIZE.1 )
+            .title("rusty_nature_of_code" )
             .build();
     
     // Sets the target fps of the program
     rl.set_target_fps( 60 );
     
-    // Loops until the user closes the window, used like the draw loop in p5.js
+    // Setup
+    // Place code to be run once here
+    
+    
+    
+    // Draw
+    // Loops until the user closes the window, put code to run each loop in following while loop
     while !rl.window_should_close( ) {
         
         // Creation of the RayLib draw handle. Drawing functions are members of this object, so must be called from this object
         let mut display = rl.begin_drawing( &thread );
         // Clears the background and sets it's colour to white
         display.clear_background( Color::WHITE );
+        
         
         
     }
