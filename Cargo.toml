@@ -16,6 +16,7 @@ opt-level = 3
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-miscmath = "0.1.13"
+misc_ecs = "0.1.10"
+miscmath = "0.1.15"
 raylib = "3.7.0"
 rand = "0.8.5"
