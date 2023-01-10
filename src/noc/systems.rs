@@ -41,7 +41,7 @@ pub fn boundary_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >( 
 		let at = atr.get( entity ).unwrap();
 		if let Some( v ) = vel.get_mut( entity ) {
 			
-			p.constrain( &(at.radius..(screen_size.0 - at.radius)), &(at.radius..(screen_size.1 - at.radius)) );
+			p.constrain( &((at.radius)..(screen_size.0 - at.radius)), &((at.radius)..(screen_size.1 - at.radius)) );
 			
 			if p.x - at.radius < 0.00000001 { v.x *= -1.0 / at.mass; v.y *= 0.99; }
 			if p.y - at.radius < 0.00000001 { v.y *= -1.0 / at.mass; v.x *= 0.99; }
