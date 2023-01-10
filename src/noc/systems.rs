@@ -5,6 +5,13 @@ use raylib::prelude::*;
 use std::collections::HashMap;
 
 ///
+///
+/// # Examples
+///
+/// ```
+///
+/// ```
+///
 pub fn movement_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >(screen_size: (i32, i32), vel: &mut V, pos: &mut P, atr: &mut A, regions: &mut Vec<HashMap<u64,EntityID>> ) {
 	
 	let screen_size = ( screen_size.0 as f32, screen_size.1 as f32 );
@@ -33,6 +40,13 @@ pub fn movement_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >(s
 }
 
 ///
+///
+/// # Examples
+///
+/// ```
+///
+/// ```
+///
 pub fn boundary_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >( screen_size: (i32, i32), vel: &mut V, pos: &mut P, atr: &A ) {
 	
 	let screen_size = ( screen_size.0 as f32, screen_size.1 as f32 );
@@ -53,19 +67,36 @@ pub fn boundary_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >( 
 }
 
 ///
+///
+/// # Examples
+///
+/// ```
+///
+/// ```
+///
 pub fn acceleration_system< A: Store<Vec2>, V: Store<Vec2> >(acc: &mut A, vel: &mut V ) {
 	
+	// Defines a closure, taking a EntityID and a mutable reference ot a Vec2, which adds the acceleration to the velocity
 	let apply_force = | entity: EntityID, velocity: &mut Vec2 | {
 		if let Some(a) = acc.get_mut( entity ) {
+			// Adds acceleration to velocity, then zeroes out the acceleration
 			velocity.add(a);
 			a.x = 0.0;
 			a.y = 0.0;
 		}
 	};
 	
+	// Iterates through every entity with velocity components and adds their acceleration to it using the closure above
 	vel.for_each_mut( apply_force );
 }
 
+///
+///
+/// # Examples
+///
+/// ```
+///
+/// ```
 ///
 pub fn collision_system< V: Store<Vec2>, P: Store<Vec2>, AT: Store<Attributes> >(vel: &mut V, pos: &P, atr: &mut AT, regions: &mut Vec<HashMap<u64,EntityID>>) {
 	
@@ -101,6 +132,13 @@ pub fn collision_system< V: Store<Vec2>, P: Store<Vec2>, AT: Store<Attributes> >
 }
 
 ///
+///
+/// # Examples
+///
+/// ```
+///
+/// ```
+///
 pub fn render_system< P: Store<Vec2>, A: Store<Attributes> >(display: &mut RaylibDrawHandle, screen_size: (i32, i32), pos: &P, atr: &A ) {
 	
 	let screen_size = ( screen_size.0 as f32, screen_size.1 as f32 );
@@ -113,6 +151,13 @@ pub fn render_system< P: Store<Vec2>, A: Store<Attributes> >(display: &mut Rayli
 	});
 }
 
+///
+///
+/// # Examples
+///
+/// ```
+///
+/// ```
 ///
 pub fn drop_system< AT: Store<Attributes>, P: Store<Vec2>, V: Store<Vec2>, A: Store<Vec2> >(screen_size: (i32, i32), entity_manager: &mut EntityManager, acc: &mut A, vel: &mut V, pos: &mut P, atr: &mut AT ) {
 	

@@ -2,6 +2,11 @@ use raylib::prelude::Color;
 
 ///
 ///
+/// # Examples
+///
+/// ```
+///
+/// ```
 ///
 pub struct Attributes {
 	pub mass: f32,
