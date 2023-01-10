@@ -96,12 +96,12 @@ fn main() {
         // boundary system is commented out
         drop_system(SCREEN_SIZE, &mut world.entity_manager_mut(), &mut acc_comp, &mut vel_comp, &mut pos_comp, &mut atr_comp);
     
-        // Draws the number of passes of the loop to the top right of the screen
+        // Draws the number of passes of the loop to the top left of the screen
         let x = format!( "Pass = {}", pass );
         display.draw_text( &x, 12, 12, 20, Color::BLACK );
         pass += 1;
     
-        // Draws the FPS to the top right of the screen
+        // Draws the FPS to the top left of the screen
         let x = format!( "FPS = {}", display.get_fps() );
         display.draw_text( &x, 12, 32, 20, Color::BLACK );
     }
