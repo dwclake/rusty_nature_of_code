@@ -1,0 +1,21 @@
+[package]
+name = "nature_of_code"
+description = ""
+version = "0.1.1"
+license = "MIT OR Apache-2.0"
+authors = ["devonwebbR2K <devonwebb559@gmail.com>"]
+edition = "2021"
+
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+miscmath = { path = "../mathlib_rust"}
+misc_ecs = { path = "../misc_ecs"}
+raylib = "3.7.0"
+rand = "0.8.5"
