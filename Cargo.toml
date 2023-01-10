@@ -16,6 +16,5 @@ opt-level = 3
 
 [dependencies]
 miscmath = "0.1.13"
-misc_ecs = { path = "../misc_ecs"}
 raylib = "3.7.0"
 rand = "0.8.5"
