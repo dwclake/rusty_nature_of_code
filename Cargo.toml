@@ -3,7 +3,8 @@ name = "rusty_nature_of_code"
 description = ""
 version = "0.1.1"
 license = "MIT OR Apache-2.0"
-authors = ["devonwebbR2K <devonwebb559@gmail.com>"]
+repository = "https://github.com/dwclake/rusty_nature_of_code"
+authors = ["dwclake <devonwebb559@gmail.com>"]
 edition = "2021"
 
 [profile.dev]

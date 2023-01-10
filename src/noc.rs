@@ -29,7 +29,9 @@ pub fn random<T: SampleUniform>( rng: Range<T> ) -> T
 /// # Examples
 ///
 /// ```
+/// use rusty_nature_of_code::prelude::*;
 ///
+/// let perlin = Noise::new( DEFAULT_NOISE_SEED );
 /// ```
 ///
 #[derive(Debug)]
@@ -45,6 +47,9 @@ impl Noise {
 	/// # Examples
 	///
 	/// ```
+	/// use rusty_nature_of_code::prelude::*;
+	///
+	/// let perlin = Noise::new( DEFAULT_NOISE_SEED );
 	///
 	/// ```
 	///
@@ -66,13 +71,6 @@ impl Noise {
 	
 	/// Takes i and adds it to the permutation table at a random index, as long as that element hasn't been set yet (is still -1).
 	/// If the element picked has been set already this function is called recursively until it picks a non-set element.
-	///
-	/// # Examples
-	///
-	/// ```
-	///
-	/// ```
-	///
 	fn permutation_gen(table: &mut [i16; 256], i: i16 ) {
 		let index = random( 0..256 );
 		

@@ -19,6 +19,8 @@ fn main() {
     
     // Setup
     // Place code to be run once here
+    
+    // testing filling an array with unique values from 0 - 255 in random order
     let perlin = Noise::new( DEFAULT_NOISE_SEED );
     dbg!( perlin );
     
