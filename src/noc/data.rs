@@ -1,6 +1,6 @@
 use raylib::prelude::Color;
 
-///
+/// A attributes struct holding characteristics of a given entity
 ///
 /// # Examples
 ///
