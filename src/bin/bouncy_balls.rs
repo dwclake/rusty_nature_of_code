@@ -8,7 +8,7 @@ use raylib::prelude::*;
 
 fn main() {
     
-    /* Creation of a constant tuple for the screen size, so it can be passed as an argument easily */
+    /* Creation of a constant tuple for the initial screen size */
     const INIT_SCREEN_SIZE: ( i32, i32 ) = ( 640, 480 );
 
     /* Creation of the RayLib handle and thread, sets the screen size, and gives the window a title */
@@ -49,7 +49,7 @@ fn main() {
        Loops until the user closes the window, put code to run each loop in following while loop */
     '_draw_loop: while !rl.window_should_close( ) {
         
-        /* Creation of a constant tuple for the screen size, so it can be passed as an argument easily */
+        /* Creation of a tuple for the current screen size */
         let screen_size: ( i32, i32 ) = ( rl.get_screen_width() , rl.get_screen_height() );
         /* Creation of a tuple with two named values, width and height, which is the screen size converted to floats */
         let ( width, height ) = ( screen_size.0 as f32, screen_size.1 as f32 );
