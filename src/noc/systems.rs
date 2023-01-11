@@ -235,7 +235,7 @@ pub fn drop_system< AT: Store<Attributes>, P: Store<Vec2>, V: Store<Vec2>, A: St
 	vel_store.for_each( | entity, vel | {
 		let pos = pos_store.get( entity ).unwrap();
 		let atr = atr_store.get( entity ).unwrap();
-		if vel.x < 0.38 && vel.y < 0.38 && pos.y - atr.radius < 0.37 {
+		if vel.x < 0.38 && vel.y < 0.38 && pos.y - atr.radius < 0.40 {
 			to_drop.push(entity);
 		}
 	});
