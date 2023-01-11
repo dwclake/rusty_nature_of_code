@@ -82,9 +82,9 @@ pub fn boundary_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >( 
 			pos.constrain( &((atr.radius)..(screen_size.0 - atr.radius)), &((atr.radius)..(screen_size.1 - atr.radius)) );
 			/* If entity hits the edges, invert their velocity and reduce it based on mass, then reduce it based on surface friction */
 			if pos.x - atr.radius < 0.00000001 { vel.x *= -1.0 / atr.mass; vel.y *= 0.99; }
-			if pos.y - atr.radius < 0.00000001 { vel.y *= -1.0 / atr.mass; vel.x *= 0.99; }
+			if pos.y - atr.radius < 0.00000001 { vel.y *= -1.0 / atr.mass; vel.x *= 0.9; }
 			if pos.x > screen_size.0 - atr.radius - 0.0001 { vel.x *= -1.0 / atr.mass; vel.y *= 0.99; }
-			if pos.y > screen_size.1 - atr.radius - 0.0001 { vel.y *= -1.0 / atr.mass; vel.x *= 0.99; }
+			if pos.y > screen_size.1 - atr.radius - 0.0001 { vel.y *= -1.0 / atr.mass; vel.x *= 0.95; }
 		}
 	});
 	
@@ -228,6 +228,15 @@ pub fn drop_system< AT: Store<Attributes>, P: Store<Vec2>, V: Store<Vec2>, A: St
 	pos_store.for_each( | entity, pos | {
 		if pos.x > screen_size.0 + 2.0 || pos.x < -2.0 || pos.y > screen_size.1 + 2.0 || pos.x < -2.0 {
 			to_drop.push( entity );
+		}
+	});
+	
+	/* Checks if they are resting on the bottom edge of screen, if they are adds them to the drop list */
+	vel_store.for_each( | entity, vel | {
+		let pos = pos_store.get( entity ).unwrap();
+		let atr = atr_store.get( entity ).unwrap();
+		if vel.x < 0.38 && vel.y < 0.38 && pos.y - atr.radius < 0.37 {
+			to_drop.push(entity);
 		}
 	});
 

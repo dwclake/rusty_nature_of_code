@@ -9,14 +9,14 @@ use raylib::prelude::*;
 fn main() {
     
     /* Creation of a constant tuple for the screen size, so it can be passed as an argument easily */
-    const SCREEN_SIZE: ( i32, i32 ) = ( 640, 480 );
-    /* Creation of a tuple with two named values, width and height, which is the screen size converted to floats */
-    let ( width, height ) = ( SCREEN_SIZE.0 as f32, SCREEN_SIZE.1 as f32 );
+    const INIT_SCREEN_SIZE: ( i32, i32 ) = ( 640, 480 );
 
     /* Creation of the RayLib handle and thread, sets the screen size, and gives the window a title */
     let ( mut rl, thread ) = init( )
-            .size(SCREEN_SIZE.0, SCREEN_SIZE.1 )
+            .size(INIT_SCREEN_SIZE.0, INIT_SCREEN_SIZE.1 )
             .title("rusty_nature_of_code" )
+            .resizable()
+            .msaa_4x()
             .build();
     
     /* Sets the target fps of the program */
@@ -40,7 +40,6 @@ fn main() {
     
     /* This is a counter to keep track of how many times the "draw" loop has iterated */
     let mut pass = 0;
-    
     /* Creates a vector of regions, or grids, used so entities only check for collisions against entities in the same region */
     for _i in 0..10 {
         regions.push( HashMap::new() );
@@ -50,13 +49,18 @@ fn main() {
        Loops until the user closes the window, put code to run each loop in following while loop */
     '_draw_loop: while !rl.window_should_close( ) {
         
+        /* Creation of a constant tuple for the screen size, so it can be passed as an argument easily */
+        let screen_size: ( i32, i32 ) = ( rl.get_screen_width() , rl.get_screen_height() );
+        /* Creation of a tuple with two named values, width and height, which is the screen size converted to floats */
+        let ( width, height ) = ( screen_size.0 as f32, screen_size.1 as f32 );
+        
         /* Creation of the RayLib draw handle. Drawing functions are members of this object, so must be called from this object */
         let mut display = rl.begin_drawing( &thread );
         /* Clears the background and sets it's colour to white */
         display.clear_background( Color::WHITE );
     
         /* Creates entities until there are 10 entities active */
-        if world.entity_manager().len() < 10 {
+        while world.entity_manager().len() < 10 {
     
             /* Creates a new entity id */
             let entity = world.entity_manager_mut().next();
@@ -65,9 +69,9 @@ fn main() {
                                     thread_rng().gen_range(100..255),
                                     thread_rng().gen_range(100..255), 255);
             /* Adds the entity with a attribute component, which is the same for every entity in this case */
-            atr_store.add(entity, Attributes { mass: 1.3, radius: 10.0, color, region: 0 } );
+            atr_store.add(entity, Attributes { mass: random( 1.01..1.56 ), radius: random( 10.0..15.0 ), color, region: 0 } );
             /* Add the entity with a random position vector, from x: 0.0 to screen width, y: 300.0 to screen height */
-            pos_store.add(entity, Vec2::create_random2(&(0.0..width), &(300.0..height) ) );
+            pos_store.add(entity, Vec2::create_random2(&(0.0..width), &((height - 100.0)..height) ) );
             /* Adds the entity with a random velocity vector with a angle from pi (180) to tau (360) and a magnitude of 5.0 */
             vel_store.add(entity, Vec2::from_angle(&thread_rng().gen_range( PI..TAU ), &Some(5.0) ) );
             /* Adds the entity with a acceleration vector with x and y at 0.0 */
@@ -90,16 +94,15 @@ fn main() {
         collision_system(&mut vel_store, &pos_store, &mut atr_store, &mut regions );
         /* Runs the movement system which moves applies the velocity to the position vectors,
            then calculates what region they are currently in */
-        movement_system(SCREEN_SIZE, &mut vel_store, &mut pos_store, &mut atr_store, &mut regions );
+        movement_system( screen_size, &mut vel_store, &mut pos_store, &mut atr_store, &mut regions );
         /* Runs the boundary system which checks if the entity has reached the edges of the screen, if they have their velocities are inverted
            and reduced based on their mass. This makes the entities bounce off of surfaces. Also limits their positions to the screen */
-        boundary_system(SCREEN_SIZE, &mut vel_store, &mut pos_store, &atr_store);
+        boundary_system( screen_size, &mut vel_store, &mut pos_store, &atr_store );
         /* Runs the render system which draws the entities at their positions as circles */
-        render_system(&mut display, SCREEN_SIZE, &pos_store, &atr_store);
-        /* Runs the drop system, which removes entities. Currently only removes them when they go out of bounds so only has effect if
-           boundary system is commented out */
-        drop_system(SCREEN_SIZE, &mut world.entity_manager_mut(),
-                               &mut acc_store, &mut vel_store, &mut pos_store, &mut atr_store);
+        render_system( &mut display, screen_size, &pos_store, &atr_store );
+        /* Runs the drop system, which removes entities. CSystem removes them when they go out of bounds and when they stop moving */
+        drop_system( screen_size, &mut world.entity_manager_mut(),
+                               &mut acc_store, &mut vel_store, &mut pos_store, &mut atr_store );
     
         /* Draws the number of passes of the loop to the top left of the screen */
         let x = format!( "Pass = {}", pass );
