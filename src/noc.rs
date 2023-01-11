@@ -63,29 +63,29 @@ impl Noise {
 			permutation_table: [-1; 256],
 		};
 		
-		// Sets each element to a number from 0 to 256, with no repeating values
+		/* Sets each element to a number from 0 to 256, with no repeating values */
 		for i in 0..256 {
 			
-			// Finds a element that hasn't been set yet to assign to i
+			/* Finds a element that hasn't been set yet to assign to i */
 			Noise::permutation_gen( &mut noise.permutation_table, i );
 		}
 		
-		// todo: implement the rest of the perlin noise algorithm, using the randomly generated permutation table to generate a array of interpolated
-		//       pseudo-random values
+		/* todo: implement the rest of the perlin noise algorithm, using the randomly generated permutation table to generate a array of interpolated
+		         pseudo-random values */
 		
 		noise
 	}
 	
-	/// RECURSIVE: Takes i and adds it to the permutation table at a random index, as long as that element hasn't been set yet (is still -1).
-	/// If the element picked has been set already this function is called recursively until it picks a non-set element.
+	// Recursive: Takes i and adds it to the permutation table at a random index, as long as that element hasn't been set yet (is still -1).
+	// If the element picked has been set already this function is called recursively until it picks a non-set element.
 	fn permutation_gen(table: &mut [i16; 256], i: i16 ) {
-		// Pick a random int between 0 and 255
+		/* Pick a random int between 0 and 255 */
 		let index = random( 0..256 );
 		
-		// Base case: If a number has not been assigned to that element yet, assign it i
+		/* Base case: If a number has not been assigned to that element yet, assign it i */
 		if table[index] == -1 {
 			table[index] = i;
-		} else if i <= 256 { // Recursive case: If a number has been assigned to that element, try again
+		} else if i <= 256 { /* Recursive case: If a number has been assigned to that element, try again */
 			Noise::permutation_gen( table, i );
 		}
 	}

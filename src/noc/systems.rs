@@ -17,13 +17,13 @@ pub fn movement_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >(s
 																			   pos_store: &mut P,
 																			   atr_store: &mut A,
 																			   regions: &mut Vec<HashMap<u64,Entity>> ) {
-	// Converts the screen_size tuple to f32 to be used in calculations
+	/* Converts the screen_size tuple to f32 to be used in calculations */
 	let screen_size = ( screen_size.0 as f32, screen_size.1 as f32 );
 	
-	// Apply a closure to each pos in the pos component store
+	/* Apply a closure to each pos in the pos component store */
 	pos_store.for_each_mut( | entity, pos | {
 		
-		// Gets the attribute component for the current entity
+		/* Gets the attribute component for the current entity */
 		let atr = atr_store.get_mut( entity ).unwrap();
 		
 		// If current entity has a velocity component, assign it to vel and run the following code block
