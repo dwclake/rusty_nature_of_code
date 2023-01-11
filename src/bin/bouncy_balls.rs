@@ -29,7 +29,7 @@ fn main() {
     let mut world = World::new();
     
     // Creates a vector of "regions", which are hash maps of entities currently in that "region"
-    let mut regions: Vec<HashMap< u64, EntityID>>  = Vec::new();
+    let mut regions: Vec<HashMap< u64, Entity>>  = Vec::new();
     
     // The following four create stores: Position, Velocity, Acceleration, and Attributes, which contains characteristics like color and mass
     let mut atr_store = HashStore::new();

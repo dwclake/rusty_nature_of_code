@@ -16,7 +16,7 @@ pub fn movement_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >(s
 																			   vel_store: &mut V,
 																			   pos_store: &mut P,
 																			   atr_store: &mut A,
-																			   regions: &mut Vec<HashMap<u64,EntityID>> ) {
+																			   regions: &mut Vec<HashMap<u64,Entity>> ) {
 	// Converts the screen_size tuple to f32 to be used in calculations
 	let screen_size = ( screen_size.0 as f32, screen_size.1 as f32 );
 	
@@ -107,8 +107,8 @@ pub fn boundary_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >( 
 ///
 pub fn acceleration_system< A: Store<Vec2>, V: Store<Vec2> >(acc_store: &mut A, vel_store: &mut V ) {
 	
-	// Defines a closure, taking a EntityID and a mutable reference of a Vec2, which adds the acc to the vel
-	let apply_force = | entity: EntityID, vel: &mut Vec2 | {
+	// Defines a closure, taking a Entity and a mutable reference of a Vec2, which adds the acc to the vel
+	let apply_force = | entity: Entity, vel: &mut Vec2 | {
 		
 		// If current entity has a acceleration component, assign it to acc and run the following code block
 		if let Some( acc) = acc_store.get_mut( entity ) {
@@ -137,7 +137,7 @@ pub fn acceleration_system< A: Store<Vec2>, V: Store<Vec2> >(acc_store: &mut A, 
 pub fn collision_system< V: Store<Vec2>, P: Store<Vec2>, AT: Store<Attributes> >(vel_store: &mut V,
 																				 pos_store: &P,
 																				 atr_store: &mut AT,
-																				 regions: &mut Vec<HashMap<u64,EntityID>>) {
+																				 regions: &mut Vec<HashMap<u64,Entity>>) {
 	// Create a vector to store entities which collide with each other
 	let mut collisions = Vec::new( );
 	
