@@ -37,16 +37,19 @@ pub fn movement_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >(s
 			/* Removes the current entity from it's current region (it may still be in this region and will be
 			   added back or it may have moved to a new region) */
 			regions[atr.row][atr.column].remove( &entity.id() );
+
 			/* Calculates the column number of the current region or grid and clamps that value to the
 			   max number of columns */
 			let mut col = ( (pos.x / screen_size.0) * 10.0 ) as usize;
 			col = col.clamp( 1, columns - 1 );
 			atr.column = col;
+
 			/* Calculates the row number of the current region or grid and clamps that value to the
 			   max number of rows */
 			let mut row = ( (pos.y / screen_size.1) * 10.0 ) as usize;
 			row = row.clamp( 1, rows - 1 );
 			atr.row = row;
+
 			/* Inserts the entity into the map, with its u64 id value as the key */
 			regions[row][col].insert( entity.id(), entity );
 		}
@@ -73,11 +76,13 @@ pub fn boundary_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >( 
 		
 		/* Gets current entities attributes component */
 		let atr = atr_store.get( entity ).unwrap();
+
 		/* If current entity has a velocity component, assign it to vel then run the following code block */
 		if let Some( vel ) = vel_store.get_mut( entity ) {
 			
 			/* Constrain entities position to within the screen, factoring in the size of the entity */
 			pos.constrain( &((atr.radius)..(screen_size.0 - atr.radius)), &((atr.radius)..(screen_size.1 - atr.radius)) );
+
 			/* If entity hits the edges, invert their velocity and reduce it based on mass, then reduce it based on surface friction */
 			if pos.x - atr.radius < 0.00000001 { vel.x *= -1.0 / atr.mass; vel.y *= 0.99; }
 			if pos.y - atr.radius < 0.00000001 { vel.y *= -1.0 / atr.mass; vel.x *= 0.9; }
@@ -100,14 +105,14 @@ pub fn acceleration_system< A: Store<Vec2>, V: Store<Vec2> >(acc_store: &mut A, 
 	
 	/* Defines a closure, taking a Entity and a mutable reference of a Vec2, which adds the acc to the vel */
 	let apply_force = | entity: Entity, vel: &mut Vec2 | {
+
 		/* If current entity has a acceleration component, assign it to acc and run the following code block */
 		if let Some( acc) = acc_store.get_mut( entity ) {
 			
 			/* Adds acc to vel, then zeroes out the acceleration */
-			vel.add(acc );
+			vel.add( acc );
 			/* Zero out the acceleration afterwards */
-			acc.x = 0.0;
-			acc.y = 0.0;
+			*acc = Vec2::new();
 		}
 	};
 	/* Iterates through every entity with vel components and adds their acc to it using the closure above */
@@ -134,13 +139,16 @@ pub fn collision_system< V: Store<Vec2>, P: Store<Vec2>, AT: Store<Attributes> >
 		
 		/* Get current entity A's attributes */
 		let atr_a = atr_store.get( entity_a ).unwrap();
+
 		/* Apply a closure to each entity in the same region as entity A */
 		regions[atr_a.row][atr_a.column].iter().for_each( | entity_b | {
 			
 			/* Get the pos of another entity, entity B, in entity A's region */
 			let pos_b = pos_store.get( *entity_b.1 ).unwrap();
+
 			/* Calculate the combined radius of entity A and entity B */
 			let rad = atr_a.radius + atr_store.get( *entity_b.1 ).unwrap().radius;
+			
 			/* If the distance squared between entity A and B is equal to the combined radius squared,
 			   add entity A and B to the collisions list as a tuple */
 			if pos_a.dist_sq( pos_b ).abs() - rad.powf( 2.0 ) < 0.0001 && ( entity_b.1.id() != entity_a.id() ) {

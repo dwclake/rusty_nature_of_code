@@ -66,6 +66,7 @@ fn main() {
 			let color = Color::new( thread_rng().gen_range(100..255),
 									thread_rng().gen_range(100..255),
 									thread_rng().gen_range(100..255), 255);
+
 			/* Adds the entity with a attribute component, which is the same for every entity in this case */
 			atr_store.add(entity, Attributes { mass: random( 1.01..1.56 ),
 													 radius: random( 10.0..15.0 ), color, row: 0, column: 0 } );
@@ -91,14 +92,18 @@ fn main() {
 		/* Runs the collision system, which checks for collisions in the entities current region, then swaps their directions
 		   Not properly detecting the collisions yet though */
 		collision_system(&mut vel_store, &pos_store, &mut atr_store, &mut regions );
+
 		/* Runs the movement system which moves applies the velocity to the position vectors,
 		   then calculates what region they are currently in */
 		movement_system(screen_size, COLUMNS, ROWS, &mut vel_store, &mut pos_store, &mut atr_store, &mut regions );
+
 		/* Runs the boundary system which checks if the entity has reached the edges of the screen, if they have their velocities are inverted
 		   and reduced based on their mass. This makes the entities bounce off of surfaces. Also limits their positions to the screen */
 		boundary_system( screen_size, &mut vel_store, &mut pos_store, &atr_store );
+
 		/* Runs the render system which draws the entities at their positions as circles */
 		render_system( &mut display, screen_size, &pos_store, &atr_store );
+
 		/* Runs the drop system, which removes entities. CSystem removes them when they go out of bounds and when they stop moving */
 		drop_system( screen_size, world.entity_manager_mut(),
 					 &mut acc_store, &mut vel_store, &mut pos_store, &mut atr_store );
