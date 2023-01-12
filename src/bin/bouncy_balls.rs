@@ -28,8 +28,9 @@ fn main() {
 	/* Creates a World instance, which currently just holds the entity manager which keeps track of entities */
 	let mut world = World::new();
 	
-	/* Creates a vector of "regions", which are hash maps of entities currently in that "region" */
-	let mut regions: Vec<HashMap< u64, Entity>>  = Vec::new();
+	/* Creates a 2d array of "regions", which are hash maps of entities currently in that "region" */
+	const COLUMNS: usize = 5;
+	let mut regions: [[HashMap<u64,Entity>; COLUMNS]; COLUMNS] = Default::default();
 	
 	/* The following four create stores: Position, Velocity, Acceleration, and Attributes,
 	   which contains characteristics like color and mass */
@@ -40,11 +41,6 @@ fn main() {
 	
 	/* This is a counter to keep track of how many times the "draw" loop has iterated */
 	let mut pass = 0;
-	/* Creates a vector of regions, or grids, used so entities only check for collisions against entities in the same region */
-	let columns: usize = 4;
-	for _i in 0..columns.pow(2) {
-		regions.push( HashMap::new() );
-	}
 	
 	/* Draw
 	   Loops until the user closes the window, put code to run each loop in following while loop */
@@ -70,7 +66,7 @@ fn main() {
 									thread_rng().gen_range(100..255),
 									thread_rng().gen_range(100..255), 255);
 			/* Adds the entity with a attribute component, which is the same for every entity in this case */
-			atr_store.add(entity, Attributes { mass: random( 1.01..1.56 ), radius: random( 10.0..15.0 ), color, region: 0 } );
+			atr_store.add(entity, Attributes { mass: random( 1.01..1.56 ), radius: random( 10.0..15.0 ), color, row: 0, column: 0 } );
 			/* Add the entity with a random position vector, from x: 0.0 to screen width, y: 300.0 to screen height */
 			pos_store.add(entity, Vec2::create_random2(&(0.0..width), &((height - 100.0)..height) ) );
 			/* Adds the entity with a random velocity vector with a angle from pi (180) to tau (360) and a magnitude of 5.0 */
@@ -95,7 +91,7 @@ fn main() {
 		collision_system(&mut vel_store, &pos_store, &mut atr_store, &mut regions );
 		/* Runs the movement system which moves applies the velocity to the position vectors,
 		   then calculates what region they are currently in */
-		movement_system( screen_size, columns, &mut vel_store, &mut pos_store, &mut atr_store, &mut regions );
+		movement_system(screen_size, COLUMNS, &mut vel_store, &mut pos_store, &mut atr_store, &mut regions );
 		/* Runs the boundary system which checks if the entity has reached the edges of the screen, if they have their velocities are inverted
 		   and reduced based on their mass. This makes the entities bounce off of surfaces. Also limits their positions to the screen */
 		boundary_system( screen_size, &mut vel_store, &mut pos_store, &atr_store );

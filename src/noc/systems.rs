@@ -17,7 +17,7 @@ pub fn movement_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >(s
 																			   vel_store: &mut V,
 																			   pos_store: &mut P,
 																			   atr_store: &mut A,
-																			   regions: &mut [HashMap<u64,Entity>] ) {
+																			   regions: &mut [[HashMap<u64, Entity>; 5]; 5] ) {
 	/* Converts the screen_size tuple to f32 to be used in calculations */
 	let screen_size = ( screen_size.0 as f32, screen_size.1 as f32 );
 	
@@ -35,23 +35,19 @@ pub fn movement_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >(s
 			
 			/* Removes the current entity from it's current region (it may still be in this region and will be
 			   added back or it may have moved to a new region) */
-			regions[atr.region].remove( &entity.id() );
+			regions[atr.row][atr.column].remove( &entity.id() );
 			/* Calculates the column number of the current region or grid and clamps that value to the
-			   max number of columns based on the number of regions */
+			   max number of columns */
 			let mut col = ( (pos.x / screen_size.0) * 10.0 ) as usize;
 			col = col.clamp( 1, columns - 1 );
+			atr.column = col;
 			/* Calculates the row number of the current region or grid and clamps that value to the
-			   max number of rows based on the number of regions */
+			   max number of rows */
 			let mut row = ( (pos.y / screen_size.1) * 10.0 ) as usize;
 			row = row.clamp( 1, columns - 1 );
-			/* Uses the row and column to calculate the index number for that region in the vector of regions and
-			   clamps the value so it can't go out of bounds */
-			let mut region_index: usize = col + row * columns;
-			region_index = region_index.clamp( 0, regions.len() - 1 );
-			/* Assigns the entities new region */
-			atr.region = region_index;
+			atr.row = row;
 			/* Inserts the entity into the map, with its u64 id value as the key */
-			regions[region_index].insert( entity.id(), entity );
+			regions[row][col].insert( entity.id(), entity );
 		}
 	});
 }
@@ -128,7 +124,7 @@ pub fn acceleration_system< A: Store<Vec2>, V: Store<Vec2> >(acc_store: &mut A, 
 pub fn collision_system< V: Store<Vec2>, P: Store<Vec2>, AT: Store<Attributes> >(vel_store: &mut V,
 																				 pos_store: &P,
 																				 atr_store: &mut AT,
-																				 regions: &mut [HashMap<u64,Entity>] ) {
+																				 regions: &mut [[HashMap<u64, Entity>; 5]; 5] ) {
 	/* Create a vector to store entities which collide with each other */
 	let mut collisions = Vec::new( );
 	
@@ -138,7 +134,7 @@ pub fn collision_system< V: Store<Vec2>, P: Store<Vec2>, AT: Store<Attributes> >
 		/* Get current entity A's attributes */
 		let atr_a = atr_store.get( entity_a ).unwrap();
 		/* Apply a closure to each entity in the same region as entity A */
-		regions[atr_a.region].iter().for_each( | entity_b | {
+		regions[atr_a.row][atr_a.column].iter().for_each( | entity_b | {
 			
 			/* Get the pos of another entity, entity B, in entity A's region */
 			let pos_b = pos_store.get( *entity_b.1 ).unwrap();

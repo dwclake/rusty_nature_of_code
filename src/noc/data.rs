@@ -12,5 +12,6 @@ pub struct Attributes {
 	pub mass: f32,
 	pub color: Color,
 	pub radius: f32,
-	pub region: usize,
+	pub row: usize,
+	pub column: usize,
 }
