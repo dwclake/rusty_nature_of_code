@@ -41,7 +41,7 @@ fn main() {
 	/* This is a counter to keep track of how many times the "draw" loop has iterated */
 	let mut pass = 0;
 	/* Creates a vector of regions, or grids, used so entities only check for collisions against entities in the same region */
-	let columns: usize = 5;
+	let columns: usize = 4;
 	for _i in 0..columns.pow(2) {
 		regions.push( HashMap::new() );
 	}
