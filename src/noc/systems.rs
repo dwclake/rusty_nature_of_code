@@ -13,10 +13,11 @@ use std::collections::HashMap;
 /// ```
 ///
 pub fn movement_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >(screen_size: (i32, i32),
+																			   columns: usize,
 																			   vel_store: &mut V,
 																			   pos_store: &mut P,
 																			   atr_store: &mut A,
-																			   regions: &mut Vec<HashMap<u64,Entity>> ) {
+																			   regions: &mut [HashMap<u64,Entity>] ) {
 	/* Converts the screen_size tuple to f32 to be used in calculations */
 	let screen_size = ( screen_size.0 as f32, screen_size.1 as f32 );
 	
@@ -38,14 +39,14 @@ pub fn movement_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >(s
 			/* Calculates the column number of the current region or grid and clamps that value to the
 			   max number of columns based on the number of regions */
 			let mut col = ( (pos.x / screen_size.0) * 10.0 ) as usize;
-			col = col.clamp( 1, regions.len() / ( regions.len() / 4 ) + 1 );
+			col = col.clamp( 1, columns - 1 );
 			/* Calculates the row number of the current region or grid and clamps that value to the
 			   max number of rows based on the number of regions */
 			let mut row = ( (pos.y / screen_size.1) * 10.0 ) as usize;
-			row = row.clamp( 1, regions.len() / ( regions.len() / 4 ) + 1 );
+			row = row.clamp( 1, columns - 1 );
 			/* Uses the row and column to calculate the index number for that region in the vector of regions and
 			   clamps the value so it can't go out of bounds */
-			let mut region_index: usize = col * row - 1;
+			let mut region_index: usize = col + row * columns;
 			region_index = region_index.clamp( 0, regions.len() - 1 );
 			/* Assigns the entities new region */
 			atr.region = region_index;
@@ -127,7 +128,7 @@ pub fn acceleration_system< A: Store<Vec2>, V: Store<Vec2> >(acc_store: &mut A, 
 pub fn collision_system< V: Store<Vec2>, P: Store<Vec2>, AT: Store<Attributes> >(vel_store: &mut V,
 																				 pos_store: &P,
 																				 atr_store: &mut AT,
-																				 regions: &mut Vec<HashMap<u64,Entity>>) {
+																				 regions: &mut [HashMap<u64,Entity>] ) {
 	/* Create a vector to store entities which collide with each other */
 	let mut collisions = Vec::new( );
 	
@@ -199,7 +200,7 @@ pub fn render_system< P: Store<Vec2>, A: Store<Attributes> >(display: &mut Rayli
 			let y = map( pos.y, 0.0..screen_size.1, screen_size.1..0.0 );
 			
 			/* Draws a circle at the entities position, with the entities radius and color */
-			display.draw_circle(pos.x as i32, y as i32, atr.radius as f32, atr.color );
+			display.draw_circle(pos.x as i32, y as i32, atr.radius, atr.color );
 		}
 	});
 }
@@ -226,7 +227,7 @@ pub fn drop_system< AT: Store<Attributes>, P: Store<Vec2>, V: Store<Vec2>, A: St
 	
 	/* Checks each entity to see if it's position is out of bounds. If it is, the entity is added to the to_drop vector */
 	pos_store.for_each( | entity, pos | {
-		if pos.x > screen_size.0 + 2.0 || pos.x < -2.0 || pos.y > screen_size.1 + 2.0 || pos.x < -2.0 {
+		if pos.x > screen_size.0 + 2.0 || pos.x < -2.0 || pos.y > screen_size.1 + 2.0 || pos.y < -2.0 {
 			to_drop.push( entity );
 		}
 	});

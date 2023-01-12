@@ -2,7 +2,7 @@ pub mod data;
 pub mod systems;
 
 use std::ops::Range;
-use miscmath::prelude::Vec2;
+//use miscmath::prelude::Vec2;
 use rand::{Rng, thread_rng};
 use rand::distributions::uniform::{SampleRange, SampleUniform};
 
