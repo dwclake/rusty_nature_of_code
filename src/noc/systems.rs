@@ -14,6 +14,7 @@ use std::collections::HashMap;
 ///
 pub fn movement_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >(screen_size: (i32, i32),
 																			   columns: usize,
+																			   rows: usize,
 																			   vel_store: &mut V,
 																			   pos_store: &mut P,
 																			   atr_store: &mut A,
@@ -44,7 +45,7 @@ pub fn movement_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >(s
 			/* Calculates the row number of the current region or grid and clamps that value to the
 			   max number of rows */
 			let mut row = ( (pos.y / screen_size.1) * 10.0 ) as usize;
-			row = row.clamp( 1, columns - 1 );
+			row = row.clamp( 1, rows - 1 );
 			atr.row = row;
 			/* Inserts the entity into the map, with its u64 id value as the key */
 			regions[row][col].insert( entity.id(), entity );
