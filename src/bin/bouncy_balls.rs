@@ -26,11 +26,11 @@ fn main() {
 	   Place code to be run once here */
 	
 	/* Creates a World instance, which currently just holds the entity manager which keeps track of entities */
-	let mut world = World::new();
+	let mut entity_manager = EntityManager::new();
 	
 	/* Creates a 2d array of "regions", which are hash maps of entities currently in that "region" */
-	const COLUMNS: usize = 5;
-	const ROWS: usize = 5;
+	const COLUMNS: usize = 10;
+	const ROWS: usize = 10;
 	let mut regions: [[HashMap<u64,Entity>; COLUMNS]; ROWS] = Default::default();
 	
 	/* The following four create stores: Position, Velocity, Acceleration, and Attributes,
@@ -58,10 +58,10 @@ fn main() {
 		display.clear_background( Color::WHITE );
 		
 		/* Creates entities until there are 10 entities active */
-		while world.entity_manager().len() < 10 {
+		while entity_manager.len() < 1000 {
 			
 			/* Creates a new entity id */
-			let entity = world.entity_manager_mut().next();
+			let entity = entity_manager.next();
 			/* Generates a random color */
 			let color = Color::new( thread_rng().gen_range(100..255),
 									thread_rng().gen_range(100..255),
@@ -105,7 +105,7 @@ fn main() {
 		render_system( &mut display, screen_size, &pos_store, &atr_store );
 
 		/* Runs the drop system, which removes entities. CSystem removes them when they go out of bounds and when they stop moving */
-		drop_system( screen_size, world.entity_manager_mut(),
+		drop_system( screen_size, &mut entity_manager,
 					 &mut acc_store, &mut vel_store, &mut pos_store, &mut atr_store );
 		
 		/* Draws the number of passes of the loop to the top left of the screen */

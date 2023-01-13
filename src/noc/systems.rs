@@ -18,7 +18,7 @@ pub fn movement_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >(s
 																			   vel_store: &mut V,
 																			   pos_store: &mut P,
 																			   atr_store: &mut A,
-																			   regions: &mut [[HashMap<u64, Entity>; 5]; 5] ) {
+																			   regions: &mut [[HashMap<u64, Entity>; 10]; 10] ) {
 	/* Converts the screen_size tuple to f32 to be used in calculations */
 	let screen_size = ( screen_size.0 as f32, screen_size.1 as f32 );
 	
@@ -130,7 +130,7 @@ pub fn acceleration_system< A: Store<Vec2>, V: Store<Vec2> >(acc_store: &mut A, 
 pub fn collision_system< V: Store<Vec2>, P: Store<Vec2>, AT: Store<Attributes> >(vel_store: &mut V,
 																				 pos_store: &P,
 																				 atr_store: &mut AT,
-																				 regions: &mut [[HashMap<u64, Entity>; 5]; 5] ) {
+																				 regions: &mut [[HashMap<u64, Entity>; 10]; 10] ) {
 	/* Create a vector to store entities which collide with each other */
 	let mut collisions = Vec::new( );
 	
