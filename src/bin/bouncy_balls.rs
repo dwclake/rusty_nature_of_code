@@ -14,7 +14,7 @@ fn main() {
 	/* Creation of the RayLib handle and thread, sets the screen size, and gives the window a title */
 	let ( mut rl, thread ) = init( )
 		.size(INIT_SCREEN_SIZE.0, INIT_SCREEN_SIZE.1 )
-		.title("rusty_nature_of_code" )
+		.title("bouncy balls" )
 		.resizable()
 		.msaa_4x()
 		.build();
@@ -58,7 +58,7 @@ fn main() {
 		display.clear_background( Color::WHITE );
 		
 		/* Creates entities until there are 10 entities active */
-		while entity_manager.len() < 1000 {
+		while entity_manager.len() < 100 {
 			
 			/* Creates a new entity id */
 			let entity = entity_manager.next();
