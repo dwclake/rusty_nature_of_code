@@ -19,6 +19,11 @@ impl Walker {
         }
     }
 
+    // Adds a Vec2 to the position of the entity
+    fn update( &mut self, vel: &Vec2 ) {
+        self.pos.add( vel );
+    }
+
     // Draws Walker instance to the screen at the instance's position, with it's color and radius
     fn draw( &self, display: &mut RaylibDrawHandle, screen_size: (i32, i32) ){
 
@@ -80,16 +85,16 @@ fn main() {
             depending on the number picked */
         match thread_rng().gen_range(0..4) {
             0 => {
-                    walker.pos = walker.pos + Vec2::create( &0.0, &2.0);
+                    walker.update(&Vec2::create( &0.0, &2.0) );
             },
             1 => {
-                    walker.pos = walker.pos + Vec2::create( &2.0, &0.0);
+                    walker.update( &Vec2::create( &2.0, &0.0) );
             },
             2 => {
-                    walker.pos = walker.pos + Vec2::create( &0.0, &-2.0);
+                    walker.update( &Vec2::create( &0.0, &-2.0) );
             },
             3 => {
-                    walker.pos = walker.pos + Vec2::create( &-2.0, &0.0);
+                    walker.update( &Vec2::create( &-2.0, &0.0) );
             },
             _ => (),
         }
