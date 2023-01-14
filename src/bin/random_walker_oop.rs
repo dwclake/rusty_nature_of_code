@@ -65,8 +65,6 @@ fn main() {
 		
 		/* Creation of a tuple for the current screen size */
 	    let screen_size: ( i32, i32 ) = ( rl.get_screen_width() , rl.get_screen_height() );
-	    /* Creation of a tuple with two named values, width and height, which is the screen size converted to floats */
-	    let ( width, height ) = ( screen_size.0 as f32, screen_size.1 as f32 );
 		
 		/* Creation of the RayLib draw handle. Drawing functions are members of this object, so must be called from this object */
 		let mut display = rl.begin_drawing( &thread );
