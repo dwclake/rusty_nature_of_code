@@ -22,8 +22,7 @@ fn main() {
 	/* Sets the target fps of the program */
 	rl.set_target_fps( 60 );
 	
-	/* Setup
-	   Place code to be run once here */
+	/* Place code to be run once here */
 	
 	/* Creates a World instance, which currently just holds the entity manager which keeps track of entities */
 	let mut entity_manager = EntityManager::new();
@@ -56,7 +55,7 @@ fn main() {
 		let mut display = rl.begin_drawing( &thread );
 		/* Clears the background and sets it's colour to white */
 		display.clear_background( Color::WHITE );
-		
+	
 		/* Creates entities until there are 10 entities active */
 		while entity_manager.len() < 100 {
 			

@@ -21,8 +21,7 @@ fn main() {
 	/* Sets the target fps of the program */
 	rl.set_target_fps( 60 );
 	
-	/* Setup
-	   Place code to be run once here */
+	/* Place code to be run once here */
 	
 	/* Creates a World instance, which currently just holds the entity manager which keeps track of entities */
 	let mut entity_manager = EntityManager::new();
@@ -43,7 +42,7 @@ fn main() {
 	let mut pass = 0;
 	
 	/* Draw
-	   Loops until the user closes the window, put code to run each loop in following while loop */
+	   Loops until the user closes the window, place code to run each loop in following while loop */
 	'_draw_loop: while !rl.window_should_close( ) {
 		
 		/* Creation of a tuple for the current screen size */
@@ -53,8 +52,11 @@ fn main() {
 		
 		/* Creation of the RayLib draw handle. Drawing functions are members of this object, so must be called from this object */
 		let mut display = rl.begin_drawing( &thread );
-		/* Clears the background and sets it's colour to white */
-        if pass < 1 {
+		/* Clears the background and sets it's colour to black for the first two iterations, as internally the drawing is done on two
+            separate "canvases" which are swapped every iteration so background needs to be applied to both, then the background is no
+            longer cleared so anything drawn to the screen stays. 
+            If only done once with any color other than black, there will be severe flickering */
+        if pass < 2 {
 		    display.clear_background( Color::BLACK );
         }
 		
