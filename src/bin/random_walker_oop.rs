@@ -10,7 +10,7 @@ struct Walker {
 
 impl Walker {
 
-    //
+    // Creates a new instance of Walker initialized with a radius of 2, position of (0,0), and a color of white
     fn new() -> Walker {
         Walker{
             pos: Vec2::new(),
@@ -19,7 +19,7 @@ impl Walker {
         }
     }
 
-    //
+    // Draws Walker instance to the screen at the instance's position, with it's color and radius
     fn draw( &self, display: &mut RaylibDrawHandle, screen_size: (i32, i32) ){
 
         let screen_size = ( screen_size.0 as f32, screen_size.1 as f32 );
