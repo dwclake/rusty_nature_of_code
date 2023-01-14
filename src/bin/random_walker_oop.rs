@@ -1,8 +1,5 @@
-use std::collections::HashMap;
 use rand::{thread_rng, Rng};
-use rusty_nature_of_code::prelude::*;
 use miscmath::prelude::*;
-use misc_ecs::prelude::*;
 use raylib::prelude::*;
 
 struct Walker {
@@ -51,9 +48,13 @@ fn main() {
 	rl.set_target_fps( 60 );
 	
 	/* Place code to be run once here */
-	
+
+	/* Creation of a tuple with two named values, width and height, which is the screen size converted to floats */
+	let ( width, height ) = ( INIT_SCREEN_SIZE.0 as f32, INIT_SCREEN_SIZE.1 as f32 );
+
+	/* Creation of a walker entity positioned at the center of the screen */
 	let mut walker = Walker::new();
-    walker.pos = Vec2::create( &(screen_size.0/2), &(screen_size.1/2) );
+    walker.pos = Vec2::create( &(width/2.0), &(height/2.0) );
 
 	/* This is a counter to keep track of how many times the "draw" loop has iterated */
 	let mut pass = 0;
@@ -63,9 +64,9 @@ fn main() {
 	'_draw_loop: while !rl.window_should_close( ) {
 		
 		/* Creation of a tuple for the current screen size */
-		let screen_size: ( i32, i32 ) = ( rl.get_screen_width() , rl.get_screen_height() );
-		/* Creation of a tuple with two named values, width and height, which is the screen size converted to floats */
-		let ( width, height ) = ( screen_size.0 as f32, screen_size.1 as f32 );
+	    let screen_size: ( i32, i32 ) = ( rl.get_screen_width() , rl.get_screen_height() );
+	    /* Creation of a tuple with two named values, width and height, which is the screen size converted to floats */
+	    let ( width, height ) = ( screen_size.0 as f32, screen_size.1 as f32 );
 		
 		/* Creation of the RayLib draw handle. Drawing functions are members of this object, so must be called from this object */
 		let mut display = rl.begin_drawing( &thread );
@@ -81,21 +82,21 @@ fn main() {
             depending on the number picked */
         match thread_rng().gen_range(0..4) {
             0 => {
-                    walker.pos += Vec2::create( &0.0, &2.0);
+                    walker.pos = walker.pos + Vec2::create( &0.0, &2.0);
             },
             1 => {
-                    walker.pos += Vec2::create( &2.0, &0.0);
+                    walker.pos = walker.pos + Vec2::create( &2.0, &0.0);
             },
             2 => {
-                    walker.pos += Vec2::create( &0.0, &-2.0);
+                    walker.pos = walker.pos + Vec2::create( &0.0, &-2.0);
             },
             3 => {
-                    walker.pos += Vec2::create( &-2.0, &0.0);
+                    walker.pos = walker.pos + Vec2::create( &-2.0, &0.0);
             },
             _ => (),
         }
 
-        walker.draw();
+        walker.draw( &mut display, screen_size);
 
 		pass += 1;
 	}
