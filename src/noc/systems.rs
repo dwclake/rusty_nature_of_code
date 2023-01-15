@@ -1,7 +1,7 @@
 use super::data::*;
+use macroquad::shapes::draw_circle;
 use miscmath::prelude::*;
 use misc_ecs::prelude::*;
-use raylib::prelude::*;
 use std::collections::HashMap;
 
 /// Applies the vel to each corresponding pos, then calculates the region, or grid that current entity is in
@@ -12,16 +12,13 @@ use std::collections::HashMap;
 ///
 /// ```
 ///
-pub fn movement_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >(screen_size: (i32, i32),
+pub fn movement_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >(screen_size: (f32, f32),
 																			   columns: usize,
 																			   rows: usize,
 																			   vel_store: &mut V,
 																			   pos_store: &mut P,
 																			   atr_store: &mut A,
 																			   regions: &mut [[HashMap<u64, Entity>; 10]; 10] ) {
-	/* Converts the screen_size tuple to f32 to be used in calculations */
-	let screen_size = ( screen_size.0 as f32, screen_size.1 as f32 );
-	
 	/* Apply a closure to each pos in the pos component store */
 	pos_store.for_each_mut( | entity, pos | {
 		
@@ -64,13 +61,11 @@ pub fn movement_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >(s
 ///
 /// ```
 ///
-pub fn boundary_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >( screen_size: (i32, i32),
+pub fn boundary_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >( screen_size: (f32, f32),
 																				vel_store: &mut V,
 																				pos_store: &mut P,
 																				atr_store: &A ) {
-	/* Converts screen_size tuple to f32 for use in calculations */
-	let screen_size = ( screen_size.0 as f32, screen_size.1 as f32 );
-	
+
 	/* Applies a closure to each entity with a pos component */
 	pos_store.for_each_mut( | entity, pos | {
 		
@@ -187,13 +182,9 @@ pub fn collision_system< V: Store<Vec2>, P: Store<Vec2>, AT: Store<Attributes> >
 ///
 /// ```
 ///
-pub fn render_system< P: Store<Vec2>, A: Store<Attributes> >(display: &mut RaylibDrawHandle,
-															 screen_size: (i32, i32),
+pub fn render_system< P: Store<Vec2>, A: Store<Attributes> >(screen_size: (f32, f32),
 															 pos_store: &P,
 															 atr_store: &A ) {
-	/* Converts screen_size tuple to f32, for use in calculations */
-	let screen_size = ( screen_size.0 as f32, screen_size.1 as f32 );
-	
 	/* Applies a closure for each entity with a position */
 	pos_store.for_each( | entity, pos| {
 		
@@ -205,7 +196,7 @@ pub fn render_system< P: Store<Vec2>, A: Store<Attributes> >(display: &mut Rayli
 			let y = map( pos.y, 0.0..screen_size.1, screen_size.1..0.0 );
 			
 			/* Draws a circle at the entities position, with the entities radius and color */
-			display.draw_circle(pos.x as i32, y as i32, atr.radius, atr.color );
+			draw_circle(pos.x, y, atr.radius, atr.color );
 		}
 	});
 }
@@ -218,7 +209,7 @@ pub fn render_system< P: Store<Vec2>, A: Store<Attributes> >(display: &mut Rayli
 ///
 /// ```
 ///
-pub fn drop_system< AT: Store<Attributes>, P: Store<Vec2>, V: Store<Vec2>, A: Store<Vec2> >(screen_size: (i32, i32),
+pub fn drop_system< AT: Store<Attributes>, P: Store<Vec2>, V: Store<Vec2>, A: Store<Vec2> >(screen_size: (f32, f32),
 																							entity_manager: &mut EntityManager,
 																							acc_store: &mut A,
 																							vel_store: &mut V,
@@ -226,9 +217,6 @@ pub fn drop_system< AT: Store<Attributes>, P: Store<Vec2>, V: Store<Vec2>, A: St
 																							atr_store: &mut AT ) {
 	/* Creates a vector of entities which will be dropped */
 	let mut to_drop = Vec::new( );
-	
-	/* Converts screen_size tuple to f32, for use in calculations */
-	let screen_size = ( screen_size.0 as f32, screen_size.1 as f32 );
 	
 	/* Checks each entity to see if it's position is out of bounds. If it is, the entity is added to the to_drop vector */
 	pos_store.for_each( | entity, pos | {

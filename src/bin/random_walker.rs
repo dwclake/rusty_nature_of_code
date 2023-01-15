@@ -1,25 +1,12 @@
 use std::collections::HashMap;
+use macroquad::{window::{next_frame, screen_width, screen_height, clear_background}, time::get_fps, prelude::{WHITE, BLACK}, text::draw_text};
 use rand::{thread_rng, Rng};
 use rusty_nature_of_code::prelude::*;
 use miscmath::prelude::*;
 use misc_ecs::prelude::*;
-use raylib::prelude::*;
 
-fn main() {
-	
-	/* Creation of a constant tuple for the initial screen size */
-	const INIT_SCREEN_SIZE: ( i32, i32 ) = ( 640, 480 );
-	
-	/* Creation of the RayLib handle and thread, sets the screen size, and gives the window a title */
-	let ( mut rl, thread ) = init( )
-		.size(INIT_SCREEN_SIZE.0, INIT_SCREEN_SIZE.1 )
-		.title("random walker" )
-		.resizable()
-		.msaa_4x()
-		.build();
-	
-	/* Sets the target fps of the program */
-	rl.set_target_fps( 60 );
+#[macroquad::main("BasicShapes")]
+async fn main() {
 	
 	/* Place code to be run once here */
 	
@@ -40,32 +27,24 @@ fn main() {
 	
 	/* This is a counter to keep track of how many times the "draw" loop has iterated */
 	let mut pass = 0;
+
+	clear_background( BLACK );
 	
 	/* Draw
 	   Loops until the user closes the window, place code to run each loop in following while loop */
-	'_draw_loop: while !rl.window_should_close( ) {
+	'_draw_loop: loop {
 		
 		/* Creation of a tuple for the current screen size */
-		let screen_size: ( i32, i32 ) = ( rl.get_screen_width() , rl.get_screen_height() );
+		let screen_size: ( f32, f32 ) = ( screen_width() , screen_height() );
 		/* Creation of a tuple with two named values, width and height, which is the screen size converted to floats */
-		let ( width, height ) = ( screen_size.0 as f32, screen_size.1 as f32 );
-		
-		/* Creation of the RayLib draw handle. Drawing functions are members of this object, so must be called from this object */
-		let mut display = rl.begin_drawing( &thread );
-		/* Clears the background and sets it's colour to black for the first two iterations, as internally the drawing is done on two
-            separate "canvases" which are swapped every iteration so background needs to be applied to both, then the background is no
-            longer cleared so anything drawn to the screen stays. 
-            If only done once with any color other than black, there will be severe flickering */
-        if pass < 2 {
-		    display.clear_background( Color::BLACK );
-        }
+		let ( width, height ) = ( screen_size.0, screen_size.1 );
 		
 		/* Creates entities until there are 10 entities active */
 		while entity_manager.len() < 1 {
 			
 			/* Creates a new entity id */
 			let entity = entity_manager.next();
-            atr_store.add(entity, Attributes { mass: 1.0, color: Color::WHITE, radius: 2.0, row: 0, column: 0 } );
+            atr_store.add(entity, Attributes { mass: 1.0, color: WHITE, radius: 2.0, row: 0, column: 0 } );
 			/* Add the entity with a random position vector, from x: 0.0 to screen width, y: 300.0 to screen height */
 			pos_store.add(entity, Vec2::create( &(width/2.0), &(height/2.0) ) );
 			/* Adds the entity with a random velocity vector with a angle from pi (180) to tau (360) and a magnitude of 5.0 */
@@ -107,12 +86,23 @@ fn main() {
 		boundary_system( screen_size, &mut vel_store, &mut pos_store, &atr_store );
 
 		/* Runs the render system which draws the entities at their positions as circles */
-		render_system( &mut display, screen_size, &pos_store, &atr_store );
+		render_system( screen_size, &pos_store, &atr_store );
 
 		/* Runs the drop system, which removes entities. CSystem removes them when they go out of bounds and when they stop moving */
 		drop_system( screen_size, &mut entity_manager,
 					 &mut acc_store, &mut vel_store, &mut pos_store, &mut atr_store );
 		
+		/* Draws the number of passes of the loop to the top left of the screen */
+		let x = format!( "Pass = {}", pass );
+		draw_text( &x, 12.0, 12.0, 20.0, WHITE );
 		pass += 1;
+		/* Draws the FPS to the top left of the screen */
+		let x = format!( "FPS = {}", get_fps() );
+		draw_text( &x, 12.0, 32.0, 20.0, WHITE );
+
+        pass += 1;
+
+        next_frame().await;
+		
 	}
 }

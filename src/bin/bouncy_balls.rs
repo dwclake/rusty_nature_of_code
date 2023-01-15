@@ -1,27 +1,17 @@
 use std::collections::HashMap;
 use std::f32::consts::{TAU,PI};
+use macroquad::prelude::{Color, WHITE, BLACK};
+use macroquad::text::draw_text;
+use macroquad::time::get_fps;
+use macroquad::window::{screen_width, screen_height, clear_background, next_frame};
 use rusty_nature_of_code::prelude::*;
 use miscmath::prelude::*;
 use misc_ecs::prelude::*;
 use rand::{Rng, thread_rng};
-use raylib::prelude::*;
 
-fn main() {
-	
-	/* Creation of a constant tuple for the initial screen size */
-	const INIT_SCREEN_SIZE: ( i32, i32 ) = ( 640, 480 );
-	
-	/* Creation of the RayLib handle and thread, sets the screen size, and gives the window a title */
-	let ( mut rl, thread ) = init( )
-		.size(INIT_SCREEN_SIZE.0, INIT_SCREEN_SIZE.1 )
-		.title("bouncy balls" )
-		.resizable()
-		.msaa_4x()
-		.build();
-	
-	/* Sets the target fps of the program */
-	rl.set_target_fps( 60 );
-	
+#[macroquad::main("BasicShapes")]
+async fn main() {
+
 	/* Place code to be run once here */
 	
 	/* Creates a World instance, which currently just holds the entity manager which keeps track of entities */
@@ -44,27 +34,25 @@ fn main() {
 	
 	/* Draw
 	   Loops until the user closes the window, put code to run each loop in following while loop */
-	'_draw_loop: while !rl.window_should_close( ) {
+	'_draw_loop: loop {
+
+		clear_background(WHITE);
 		
 		/* Creation of a tuple for the current screen size */
-		let screen_size: ( i32, i32 ) = ( rl.get_screen_width() , rl.get_screen_height() );
+		let screen_size: ( f32, f32 ) = ( screen_width(), screen_height() );
 		/* Creation of a tuple with two named values, width and height, which is the screen size converted to floats */
-		let ( width, height ) = ( screen_size.0 as f32, screen_size.1 as f32 );
+		let ( width, height ) = ( screen_width(), screen_height() );
 		
-		/* Creation of the RayLib draw handle. Drawing functions are members of this object, so must be called from this object */
-		let mut display = rl.begin_drawing( &thread );
-		/* Clears the background and sets it's colour to white */
-		display.clear_background( Color::WHITE );
-	
+		
 		/* Creates entities until there are 10 entities active */
 		while entity_manager.len() < 100 {
 			
 			/* Creates a new entity id */
 			let entity = entity_manager.next();
 			/* Generates a random color */
-			let color = Color::new( thread_rng().gen_range(100..255),
-									thread_rng().gen_range(100..255),
-									thread_rng().gen_range(100..255), 255);
+			let color = Color::new( thread_rng().gen_range(0.5..1.0),
+									thread_rng().gen_range(0.5..1.0),
+									thread_rng().gen_range(0.5..1.0), 255.0);
 
 			/* Adds the entity with a attribute component, which is the same for every entity in this case */
 			atr_store.add(entity, Attributes { mass: random( 1.01..1.56 ),
@@ -101,7 +89,7 @@ fn main() {
 		boundary_system( screen_size, &mut vel_store, &mut pos_store, &atr_store );
 
 		/* Runs the render system which draws the entities at their positions as circles */
-		render_system( &mut display, screen_size, &pos_store, &atr_store );
+		render_system( screen_size, &pos_store, &atr_store );
 
 		/* Runs the drop system, which removes entities. CSystem removes them when they go out of bounds and when they stop moving */
 		drop_system( screen_size, &mut entity_manager,
@@ -109,15 +97,12 @@ fn main() {
 		
 		/* Draws the number of passes of the loop to the top left of the screen */
 		let x = format!( "Pass = {}", pass );
-		display.draw_text( &x, 12, 12, 20, Color::BLACK );
+		draw_text( &x, 12.0, 12.0, 20.0, BLACK );
 		pass += 1;
 		/* Draws the FPS to the top left of the screen */
-		let x = format!( "FPS = {}", display.get_fps() );
-		display.draw_text( &x, 12, 32, 20, Color::BLACK );
+		let x = format!( "FPS = {}", get_fps() );
+		draw_text( &x, 12.0, 32.0, 20.0, BLACK );
+
+		next_frame().await;
 	}
-	/* Prints out the active entities which has position components when the screen was closed */
-	for (entity, p) in pos_store {
-		println!( "{:?}: {:?}", entity, p);
-	}
-	dbg!(regions);
 }
