@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use rand::{thread_rng, Rng};
 use rusty_nature_of_code::prelude::*;
-use miscmath::prelude::*;
+use miscmath::prelude::vector::Vec2;
 use misc_ecs::prelude::*;
 use raylib::prelude::*;
 

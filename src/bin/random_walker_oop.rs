@@ -1,5 +1,5 @@
 use rand::{thread_rng, Rng};
-use miscmath::prelude::*;
+use miscmath::prelude::{*, vector::Vec2};
 use raylib::prelude::*;
 
 struct Walker {

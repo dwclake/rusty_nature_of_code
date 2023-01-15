@@ -17,6 +17,6 @@ opt-level = 3
 
 [dependencies]
 misc_ecs = "0.1"
-miscmath = "0.2"
+miscmath = "0.3"
 raylib = "3.7.0"
 rand = "0.8.5"
