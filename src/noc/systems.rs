@@ -112,7 +112,7 @@ pub fn acceleration_system< A: Store<Vec2>, V: Store<Vec2> >(acc_store: &mut A, 
 			/* Adds acc to vel, then zeroes out the acceleration */
 			vel.add( acc );
 			/* Zero out the acceleration afterwards */
-			*acc = Vec2::new();
+			*acc = Vec2::default();
 		}
 	};
 	/* Iterates through every entity with vel components and adds their acc to it using the closure above */

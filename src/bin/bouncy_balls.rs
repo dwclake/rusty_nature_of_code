@@ -74,7 +74,7 @@ fn main() {
 			/* Adds the entity with a random velocity vector with a angle from pi (180) to tau (360) and a magnitude of 5.0 */
 			vel_store.add(entity, Vec2::from_angle(&thread_rng().gen_range( PI..TAU ), &Some(5.0) ) );
 			/* Adds the entity with a acceleration vector with x and y at 0.0 */
-			acc_store.add(entity, Vec2::new() );
+			acc_store.add(entity, Vec2::default() );
 		}
 		
 		/* Applies a downward acceleration to every entity with a acceleration component */

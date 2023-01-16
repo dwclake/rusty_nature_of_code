@@ -13,7 +13,7 @@ impl Walker {
     // Creates a new instance of Walker initialized with a radius of 2, position of (0,0), and a color of white
     fn new() -> Walker {
         Walker{
-            pos: Vec2::new(),
+            pos: Vec2::default(),
             color: Color::WHITE,
             radius: 2.0,
         }
@@ -59,7 +59,7 @@ fn main() {
 
 	/* Creation of a walker entity positioned at the center of the screen */
 	let mut walker = Walker::new();
-    walker.pos = Vec2::create( &(width/2.0), &(height/2.0) );
+    walker.pos = Vec2::new( &(width/2.0), &(height/2.0) );
 
 	/* This is a counter to keep track of how many times the "draw" loop has iterated */
 	let mut pass = 0;
@@ -85,16 +85,16 @@ fn main() {
             depending on the number picked */
         match thread_rng().gen_range(0..4) {
             0 => {
-                    walker.update(&Vec2::create( &0.0, &2.0) );
+                    walker.update(&Vec2::new( &0.0, &2.0) );
             },
             1 => {
-                    walker.update( &Vec2::create( &2.0, &0.0) );
+                    walker.update( &Vec2::new( &2.0, &0.0) );
             },
             2 => {
-                    walker.update( &Vec2::create( &0.0, &-2.0) );
+                    walker.update( &Vec2::new( &0.0, &-2.0) );
             },
             3 => {
-                    walker.update( &Vec2::create( &-2.0, &0.0) );
+                    walker.update( &Vec2::new( &-2.0, &0.0) );
             },
             _ => (),
         }
