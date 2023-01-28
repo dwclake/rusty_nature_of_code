@@ -36,7 +36,7 @@ fn main() {
 	'_draw_loop: while !rl.window_should_close( ) {
 		
 		/* Creation of a tuple for the current screen size */
-		let screen_size: ( i32, i32 ) = ( rl.get_screen_width() , rl.get_screen_height() );
+		//let screen_size: ( i32, i32 ) = ( rl.get_screen_width() , rl.get_screen_height() );
 		
 		/* Creation of the RayLib draw handle. Drawing functions are members of this object, so must be called from this object */
 		let mut display = rl.begin_drawing( &thread );
