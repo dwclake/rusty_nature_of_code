@@ -1,7 +1,6 @@
-use rand::{thread_rng, Rng};
-use miscmath::prelude::{*, vector::Vec2};
+use rand::{thread_rng, Rng, RngCore};
 use raylib::prelude::*;
-use noise::{NoiseFn, Perlin, Seedable};
+use noise::{NoiseFn, Perlin};
 
 fn main() {
 	
@@ -24,34 +23,29 @@ fn main() {
 	/* Creation of a tuple with two named values, width and height, which is the screen size converted to floats */
 	let ( width, height ) = ( INIT_SCREEN_SIZE.0 as f32, INIT_SCREEN_SIZE.1 as f32 );
 	
-	/* This is a counter to keep track of how many times the "draw" loop has iterated */
-	let mut pass = 0;
+	/* Creation of a perlin object, with a random seed */
+	let perlin = Perlin::new(thread_rng().next_u32() );
 	
-	let perlin = Perlin::new(100101 );
-	let mut num1 = thread_rng().gen_range(0.0..100.0);
-	let mut num2 = thread_rng().gen_range(0.0..100.0);
+	/* Creation of offsets, which are used to get values from the perlin object */
+	let mut x_off = thread_rng().gen_range(0.0..100.0);
+	let mut y_off = thread_rng().gen_range(0.0..100.0);
 	
 	/* Draw
 	   Loops until the user closes the window, place code to run each loop in following while loop */
 	'_draw_loop: while !rl.window_should_close( ) {
-		
-		/* Creation of a tuple for the current screen size */
-		//let screen_size: ( i32, i32 ) = ( rl.get_screen_width() , rl.get_screen_height() );
 		
 		/* Creation of the RayLib draw handle. Drawing functions are members of this object, so must be called from this object */
 		let mut display = rl.begin_drawing( &thread );
 		/* Clears the background and sets it's colour to black */
 		display.clear_background( Color::BLACK );
 		
-		pass += 1;
+		/* Get a value out of perlin, using the current offsets */
+		let val = perlin.get([x_off, y_off]).abs() as f32 * (width - 10.0) + 50.0;
+		/* Increments/decrements offsets by small values to get get smooth randomness*/
+		x_off += 0.01;
+		y_off -= 0.01;
 		
-		num1 += 0.01;
-		num2 -= 0.01;
-		
-		let val = perlin.get([num1, num2]).abs() as f32 * (width - 10.0) + 50.0;
-		
-		//let val = map(val, -1.0..1.0, 0.0..1.0 ) as i32;
-		dbg!(val);
-		display.draw_circle(val as i32, (height / 2.0) as i32, 5.0, Color::WHITE);
+		/* Draws a circle with a x pos of the perlin value, and a y pos of 1/2 the screen height */
+		display.draw_circle(val as i32, (height / 2.0) as i32, 10.0, Color::WHITE);
 	}
 }
