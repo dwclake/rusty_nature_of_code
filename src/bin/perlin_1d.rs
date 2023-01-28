@@ -5,7 +5,7 @@ use noise::{NoiseFn, Perlin};
 fn main() {
 	
 	/* Creation of a constant tuple for the initial screen size */
-	const INIT_SCREEN_SIZE: ( i32, i32 ) = ( 640, 480 );
+	const INIT_SCREEN_SIZE: ( i32, i32 ) = ( 480, 480 );
 	
 	/* Creation of the RayLib handle and thread, sets the screen size, and gives the window a title */
 	let ( mut rl, thread ) = init( )
@@ -39,7 +39,7 @@ fn main() {
 		display.clear_background( Color::BLACK );
 		
 		/* Get a value out of perlin, using the current x offset, with y offset set to 0 */
-		let val = perlin.get([x_off, 0.0]).abs() as f32 * (width - 10.0) + 50.0;
+		let val = (perlin.get([x_off, 0.0]).abs() as f32) * width;
 		/* Increments offset by a small value to get get smooth randomness */
 		x_off += 0.01;
 		
