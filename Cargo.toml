@@ -8,7 +8,7 @@ authors = ["dwclake <devonwebb559@gmail.com>"]
 edition = "2021"
 
 [profile.dev]
-opt-level = 1
+opt-level = 0
 
 [profile.dev.package."*"]
 opt-level = 3
@@ -17,7 +17,7 @@ opt-level = 3
 
 [dependencies]
 misc_ecs = "0.1"
-miscmath = "0.3"
+miscmath = "0.3.2"
 raylib = "3.7.0"
 rand = "0.8.5"
 noise = "0.8.2"

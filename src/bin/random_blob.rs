@@ -1,5 +1,4 @@
-use miscmath::prelude::vector::Vec2;
-use miscmath::random;
+use miscmath::prelude::*;
 use rand::thread_rng;
 use raylib::prelude::*;
 use rand::prelude::SliceRandom;
@@ -7,7 +6,7 @@ use rand::prelude::SliceRandom;
 fn main() {
 	
 	/* Creation of a constant tuple for the initial screen size */
-	const INIT_SCREEN_SIZE: ( i32, i32 ) = ( 480, 480 );
+	const INIT_SCREEN_SIZE: ( i32, i32 ) = ( 1480, 1480 );
 	
 	/* Creation of the RayLib handle and thread, sets the screen size, and gives the window a title */
 	let ( mut rl, thread ) = init( )
@@ -86,9 +85,9 @@ fn main() {
 		/* Draws every circle with a random color */
 		for (pos, _) in circles {
 			display.draw_circle(pos.x as i32, pos.y as i32, 10.0, Color::new(
-				random(100..200),
-				random(100..200),
-				random(100..200),
+				random(150..255),
+				random(150..255),
+				random(150..255),
 				150
 			));
 		}

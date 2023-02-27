@@ -1,5 +1,5 @@
 use super::data::*;
-use miscmath::prelude::{*, vector::Vec2};
+use miscmath::prelude::*;
 use misc_ecs::prelude::*;
 use raylib::prelude::*;
 use std::collections::HashMap;
