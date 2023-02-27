@@ -18,7 +18,7 @@ fn main() {
 		.build();
 	
 	/* Sets the target fps of the program */
-	rl.set_target_fps( 120 );
+	rl.set_target_fps( 60 );
 	
 	/* Place code to be run once here */
 	
