@@ -10,7 +10,7 @@ fn main() {
 	/* Creation of the RayLib handle and thread, sets the screen size, and gives the window a title */
 	let ( mut rl, thread ) = init( )
 		.size(INIT_SCREEN_SIZE.0, INIT_SCREEN_SIZE.1 )
-		.title("random walker" )
+		.title("perlin 1d" )
 		.resizable()
 		.msaa_4x()
 		.build();
