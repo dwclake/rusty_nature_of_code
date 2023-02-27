@@ -1,4 +1,3 @@
-use std::ops::Mul;
 use miscmath::prelude::vector::Vec2;
 use miscmath::random;
 use rand::thread_rng;
