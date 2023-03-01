@@ -6,7 +6,7 @@ use rand::prelude::SliceRandom;
 fn main() {
 	
 	/* Creation of a constant tuple for the initial screen size */
-	const INIT_SCREEN_SIZE: ( i32, i32 ) = ( 1480, 1480 );
+	const INIT_SCREEN_SIZE: ( i32, i32 ) = ( 480, 480 );
 	
 	/* Creation of the RayLib handle and thread, sets the screen size, and gives the window a title */
 	let ( mut rl, thread ) = init( )
@@ -25,7 +25,7 @@ fn main() {
 	let ( width, height ) = ( INIT_SCREEN_SIZE.0 as f32, INIT_SCREEN_SIZE.1 as f32 );
 	
 	/* Creates an array of tuples, each tuple containing a position and a velocity */
-	let mut circles = [(Vec2::new( &(width / 2.0), &(height/ 2.0)), Vec2::default());500];
+	let mut circles = [(Vec2::new( &(width / 2.0), &(height/ 2.0)), Vec2::default()); 500];
 	/* Creates an array of closures, each closure applies the velocity to the position differently */
 	let functions = [
 		|(pos, vel): &mut(Vec2, Vec2)| {
@@ -45,20 +45,20 @@ fn main() {
 			pos.y *= vel.y;
 		},
 		|(pos, vel): &mut(Vec2, Vec2)| {
-			pos.x *= vel.y;
-			pos.y *= vel.x;
+			pos.x *= vel.y.sqrt();
+			pos.y /= vel.x.powf(2.0);
 		},
 		|(pos, vel): &mut(Vec2, Vec2)| {
-			pos.x *= vel.y;
-			pos.y /= vel.x;
+			pos.x /= vel.y.sqrt();
+			pos.y *= vel.y.powf(2.0);
 		},
 		|(pos, vel): &mut(Vec2, Vec2)| {
-			pos.x /= vel.y;
-			pos.y *= vel.x;
+			pos.x -= vel.y.cos();
+			pos.y += vel.x.sin();
 		},
 		|(pos, vel): &mut(Vec2, Vec2)| {
-			pos.x /= vel.y;
-			pos.y *= vel.x;
+			pos.x += vel.x.cos();
+			pos.y -= vel.x.sin();
 		}
 	];
 	/* Instantiates a random number generator */
@@ -84,12 +84,7 @@ fn main() {
 		
 		/* Draws every circle with a random color */
 		for (pos, _) in circles {
-			display.draw_circle(pos.x as i32, pos.y as i32, 10.0, Color::new(
-				random(150..255),
-				random(150..255),
-				random(150..255),
-				150
-			));
+			display.draw_circle(pos.x as i32, pos.y as i32, 10.0, Color::WHITE);
 		}
 	}
 }
