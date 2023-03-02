@@ -4,10 +4,10 @@ use miscmath::prelude::Vec2;
 use raylib::prelude::{Color, RaylibDraw, RaylibDrawHandle};
 use crate::smart_rockets::prelude::{Attributes, World};
 
-pub fn render_system< P: Store<Vec2>, A: Store<Attributes> >(display: &mut RaylibDrawHandle,
-															 world: &World,
-															 pos_store: &P,
-															 atr_store: &A ) {
+pub fn render_system< P: Store<Vec2>, A: Store<Attributes>>(display: &mut RaylibDrawHandle,
+															world: &World,
+															pos_store: &P,
+															atr_store: &A ) {
 	/* Applies a closure for each entity with a position */
 	pos_store.for_each( | entity, pos| {
 		
@@ -35,10 +35,10 @@ pub fn render_system< P: Store<Vec2>, A: Store<Attributes> >(display: &mut Rayli
 ///
 /// ```
 ///
-pub fn boundary_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >( world: &World,
-																				vel_store: &mut V,
-																				pos_store: &mut P,
-																				atr_store: &A ) {
+pub fn boundary_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes>>( world: &World,
+																			   vel_store: &mut V,
+																			   pos_store: &mut P,
+																			   atr_store: &A ) {
 	/* Applies a closure to each entity with a pos component */
 	pos_store.for_each_mut( | entity, pos | {
 		
