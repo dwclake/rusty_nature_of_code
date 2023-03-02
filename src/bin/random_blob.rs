@@ -6,7 +6,7 @@ use rand::prelude::SliceRandom;
 fn main() {
 	
 	/* Creation of a constant tuple for the initial screen size */
-	const INIT_SCREEN_SIZE: ( i32, i32 ) = ( 1480, 1480 );
+	const INIT_SCREEN_SIZE: ( i32, i32 ) = ( 640, 480 );
 	
 	/* Creation of the RayLib handle and thread, sets the screen size, and gives the window a title */
 	let ( mut rl, thread ) = init( )

@@ -61,6 +61,6 @@ pub fn boundary_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >( 
 	
 }
 
-pub fn genetic_system<P: Store<Vec2>, G: Store<[i8; 10]>>(world: &World, pos_store: &mut P, gene_store: &mut G) {
+pub fn genetic_system<P: Store<Vec2>, G: Store<[i8; 10]>>(_world: &World, _pos_store: &mut P, _gene_store: &mut G) {
 
 }
