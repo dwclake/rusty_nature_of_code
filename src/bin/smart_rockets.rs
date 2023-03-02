@@ -91,7 +91,7 @@ fn main() {
 		
 		display.clear_background(Color::BLACK);
 		
-		for i in 0..10 {
+		for _ in 0..10 {
 			/* Runs the boundary system which checks if the entity has reached the edges of the screen, if they have their velocities are inverted
 			   and reduced based on their mass. This makes the entities bounce off of surfaces. Also limits their positions to the screen */
 			boundary_system( &world, &mut vel_store, &mut pos_store, &atr_store );
@@ -101,7 +101,7 @@ fn main() {
 		genetic_system(&world, &mut pos_store, &mut gene_store);
 		
 		/* Draws the number of passes of the loop to the top left of the screen */
-		let x = format!( "Pass = {}", pass );
+		let x = format!( "Generation = {}", pass );
 		display.draw_text( &x, 12, 12, 20, Color::BLACK );
 		pass += 1;
 		/* Draws the FPS to the top left of the screen */

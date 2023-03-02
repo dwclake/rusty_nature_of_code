@@ -1,13 +1,14 @@
-use misc_ecs::prelude::Store;
-use miscmath::map;
+use misc_ecs::prelude::{Entity, Store};
+use miscmath::{map, random};
 use miscmath::prelude::Vec2;
 use raylib::prelude::{Color, RaylibDraw, RaylibDrawHandle};
+use crate::smart_rockets::choose_two;
 use crate::smart_rockets::prelude::{Attributes, World};
 
-pub fn render_system< P: Store<Vec2>, A: Store<Attributes> >(display: &mut RaylibDrawHandle,
-															 world: &World,
-															 pos_store: &P,
-															 atr_store: &A ) {
+pub fn render_system<P: Store<Vec2>, A: Store<Attributes>>(display: &mut RaylibDrawHandle,
+														   world: &World,
+														   pos_store: &P,
+														   atr_store: &A ) {
 	/* Applies a closure for each entity with a position */
 	pos_store.for_each( | entity, pos| {
 		
@@ -35,10 +36,10 @@ pub fn render_system< P: Store<Vec2>, A: Store<Attributes> >(display: &mut Rayli
 ///
 /// ```
 ///
-pub fn boundary_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >( world: &World,
-																				vel_store: &mut V,
-																				pos_store: &mut P,
-																				atr_store: &A ) {
+pub fn boundary_system<V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes>>(world: &World,
+																			 vel_store: &mut V,
+																			 pos_store: &mut P,
+																			 atr_store: &A ) {
 	/* Applies a closure to each entity with a pos component */
 	pos_store.for_each_mut( | entity, pos | {
 		
@@ -61,6 +62,60 @@ pub fn boundary_system< V: Store<Vec2>, P: Store<Vec2>, A: Store<Attributes> >( 
 	
 }
 
+/// Generates the new population
+///
+/// # Examples
+///
+/// ```
+///
+/// ```
+///
 pub fn genetic_system<P: Store<Vec2>, G: Store<[i8; 10]>>(world: &World, pos_store: &mut P, gene_store: &mut G) {
-
+	
+	let mut weights: [(Entity, f32);10] = Default::default();
+	let mut i = 0;
+	
+	/* Calculates the entities distance from the target, and assigns a weight respectively */
+	gene_store.for_each( |entity, dna| {
+		
+		if let Some( pos ) = pos_store.get( entity ) {
+			let distance = pos.dist( &world.target_pos );
+			let weight = map(distance, 0.0..world.width, 1.0..0.0);
+			weights[i] = (entity, weight);
+		}
+		i = i + 1;
+	});
+	
+	/* Clones the dna of two randomly chosen entities based on their weights */
+	let (entity_a, entity_b) = choose_two(&weights);
+	let dna_a = gene_store.get( entity_a ).unwrap().clone();
+	let dna_b = gene_store.get( entity_b ).unwrap().clone();
+	
+	/* Iterates through each entity and generates new dna */
+	gene_store.for_each_mut( |entity, dna| {
+		/* Resets the position of the rockets */
+		if let Some(pos) = pos_store.get_mut( entity ) {
+			*pos = Vec2::new( &(world.width/2.0), &(0.0));
+		}
+		
+		/* Generates a temp dna */
+		let mut temp_dna: [i8; 10] = Default::default();
+		let mut i = 0;
+		/* Assigns each element of temp_dna the value of either dna_a or dna_b's element at the same index */
+		for gene in &mut temp_dna {
+			match random(0..2) {
+				0 => {
+					*gene = dna_a[i];
+				},
+				1 => {
+					*gene = dna_b[i];
+				},
+				_ => {}
+			}
+			i = i + 1;
+		}
+		/* Assigns entities dna the newly generated dna */
+		*dna = temp_dna;
+	});
+	
 }
