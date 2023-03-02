@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use rand::{thread_rng, Rng};
-use rusty_nature_of_code::prelude::*;
+use rusty_nature_of_code::bouncy_balls::prelude::*;
 use miscmath::prelude::*;
 use misc_ecs::prelude::*;
 use raylib::prelude::*;
@@ -68,7 +68,7 @@ fn main() {
             atr_store.add(entity, Attributes { mass: 1.0, color: Color::WHITE, radius: 2.0, row: 0, column: 0 } );
 			/* Add the entity with a random position vector, from x: 0.0 to screen width, y: 300.0 to screen height */
 			pos_store.add(entity, Vec2::new( &(width/2.0), &(height/2.0) ) );
-			/* Adds the entity with a random velocity vector with a angle from pi (180) to tau (360) and a magnitude of 5.0 */
+			/* Adds the entity with a velocity of 0 */
 			vel_store.add(entity, Vec2::default() );
 		}
 

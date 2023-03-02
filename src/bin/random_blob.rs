@@ -6,7 +6,7 @@ use rand::prelude::SliceRandom;
 fn main() {
 	
 	/* Creation of a constant tuple for the initial screen size */
-	const INIT_SCREEN_SIZE: ( i32, i32 ) = ( 480, 480 );
+	const INIT_SCREEN_SIZE: ( i32, i32 ) = ( 1480, 1480 );
 	
 	/* Creation of the RayLib handle and thread, sets the screen size, and gives the window a title */
 	let ( mut rl, thread ) = init( )
@@ -84,7 +84,7 @@ fn main() {
 		
 		/* Draws every circle with a random color */
 		for (pos, _) in circles {
-			display.draw_circle(pos.x as i32, pos.y as i32, 10.0, Color::WHITE);
+			display.draw_circle(pos.x as i32, pos.y as i32, width/50.0, Color::WHITE);
 		}
 	}
 }

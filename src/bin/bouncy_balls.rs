@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use std::f32::consts::{TAU,PI};
-use rusty_nature_of_code::prelude::*;
+use rusty_nature_of_code::bouncy_balls::prelude::*;
 use miscmath::prelude::*;
 use misc_ecs::prelude::*;
 use rand::{Rng, thread_rng};
