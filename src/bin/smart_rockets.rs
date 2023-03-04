@@ -46,34 +46,34 @@ fn main() {
 	
 	let mut functions: [Box<dyn FnMut(&mut Vec2)>; 10]  = [
 		Box::new(|acc| {
-			acc.lerp(&world.target_pos, UnitF::new(0.003));
+			acc.lerp(&world.target_pos, UnitF::new(0.03));
 		}),
 		Box::new(|acc| {
-			*acc = Vec2::new(&5.5, &-5.4);
+			*acc = Vec2::new(&15.5, &15.5);
 		}),
 		Box::new(|acc| {
-			*acc = Vec2::new(&-2.5, &4.4);
+			*acc = Vec2::new(&0.0, &-14.4);
 		}),
 		Box::new(|acc| {
-			*acc = Vec2::new(&7.5, &-15.4);
+			*acc = Vec2::new(&-17.5, &0.0);
 		}),
 		Box::new(|acc| {
-			*acc = Vec2::new(&-6.5, &-4.4);
+			*acc = Vec2::new(&-16.5, &14.0);
 		}),
 		Box::new(|acc| {
-			*acc = Vec2::new(&-3.5, &12.4);
+			*acc = Vec2::new(&0.0, &-18.4);
 		}),
 		Box::new(|acc| {
-			*acc = Vec2::new(&12.5, &7.4);
+			*acc = Vec2::new(&18.5, &0.0);
 		}),
 		Box::new(|acc| {
-			*acc = Vec2::new(&1.5, &8.4);
+			*acc = Vec2::new(&12.3, &-18.4);
 		}),
 		Box::new(|acc| {
-			*acc = Vec2::new(&-2.5, &5.4);
+			*acc = Vec2::new(&-12.5, &0.0);
 		}),
 		Box::new(|acc| {
-			*acc = Vec2::new(&8.5, &2.4);
+			*acc = Vec2::new(&0.0, &12.4);
 		}),
 	];
 	
@@ -85,7 +85,7 @@ fn main() {
 		pos_store.add(entity, world.default_pos);
 		vel_store.add(entity, world.default_vel);
 		acc_store.add(entity, Vec2::default());
-		mass_store.add(entity, 1.01);
+		mass_store.add(entity, 1.1);
 		gene_store.add(entity, [
 			random(0..10),
 			random(0..10),
