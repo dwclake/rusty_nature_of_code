@@ -4,13 +4,14 @@ use raylib::prelude::Color;
 pub struct World {
 	pub width: f32,
 	pub height: f32,
+	pub default_pos: Vec2,
+	pub default_vel: Vec2,
 	pub target_pos: Vec2,
-	pub functions: [fn((Vec2, Vec2, Vec2)); 10],
+	pub mutation_chance: f64,
+	pub gen_done: bool
 }
 
 pub struct Attributes {
 	pub radius: f32,
-	pub color: Color,
-	pub row: usize,
-	pub column: usize,
+	pub color: Color
 }

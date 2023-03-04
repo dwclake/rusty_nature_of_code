@@ -1,5 +1,6 @@
 use misc_ecs::prelude::Entity;
-use rand::prelude::SliceRandom;
+use rand::distributions::WeightedError;
+use rand::prelude::{SliceRandom, ThreadRng};
 use rand::thread_rng;
 
 pub mod data;
@@ -14,20 +15,24 @@ pub mod prelude;
 ///
 /// ```
 ///
-pub fn choose_two(weights: &[(Entity, f32);10]) -> (Entity, Entity) {
+pub fn choose_two(weights: &[(Entity, u32);10]) -> Result<(&Entity, &Entity), WeightedError> {
 	let mut rng = thread_rng();
-	let chosen = weights.choose_multiple_weighted(
-		&mut rng,
-		2,
-		|entity| { entity.1 }
-	);
-	
-	match chosen {
-		Ok(mut entities) => {
-			(entities.next().unwrap().0, entities.next().unwrap().0)
-		}
-		Err(_) => {
-			(Entity::default(), Entity::default())
-		}
+	let first_chosen = choose_one(weights, &mut rng)?;
+	let mut second_chosen = choose_one(weights, &mut rng)?;
+	while first_chosen == second_chosen {
+		second_chosen = choose_one(weights, &mut rng)?;
 	}
+	Ok((first_chosen, second_chosen))
+}
+
+fn choose_one<'a>(weights: &'a [(Entity, u32);10], rng: &mut ThreadRng) -> Result<&'a Entity, WeightedError> {
+	
+	return match weights.choose_weighted(rng, |entity| { entity.1 }) {
+		Ok((entity, _)) => {
+			Ok(entity)
+		}
+		Err(e) => {
+			Err(e)
+		}
+	};
 }
