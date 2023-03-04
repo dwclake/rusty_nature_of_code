@@ -132,7 +132,7 @@ fn main() {
 		if pass % 10 == 0 {
 			world.gen_done = true;
 			
-			thread::sleep(time::Duration::from_millis(300));
+			//thread::sleep(time::Duration::from_millis(100));
 		}
 		
 		/* Draws the number of passes of the loop to the top left of the screen */

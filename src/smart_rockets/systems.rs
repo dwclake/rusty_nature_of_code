@@ -81,7 +81,6 @@ pub fn genetic_system<P: Store<Vec2>, V: Store<Vec2>, G: Store<[usize; 10]>>(wor
 	gene_store.for_each( |entity, _| {
 		if let Some( pos ) = pos_store.get( entity ) {
 			let distance = ((world.target_pos.x - pos.x).powf(2.0) + (world.target_pos.y - pos.y).powf(2.0)).sqrt();
-			dbg!(distance);
 			let weight = map(distance, 0.0..world.width.clone(), 100.0..0.0) as u32;
 			weights[i] = (entity, weight);
 		}
